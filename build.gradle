@@ -1,15 +1,16 @@
 plugins {
     id 'java'
     id 'groovy'
-    id 'java-gradle-plugin'
-    id 'maven-publish'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
-    id 'com.gradle.plugin-publish' version '0.9.10'
+    id 'com.gradle.plugin-publish' version '1.0.0-rc-2'
 }
 
 repositories {
     mavenCentral()
 }
+
+group = 'org.hypergammaspace.gradle-plugins'
+version = '0.11.0'
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
@@ -45,7 +46,8 @@ gradlePlugin {
 
     plugins {
         gitVersionPlugin {
-            id = 'org.unbroken-dome.gitversion'
+            id = 'org.hypergammaspace.gitversion'
+            displayName = friendly_name
             implementationClass = 'org.unbrokendome.gradle.plugins.gitversion.GitVersionPlugin'
         }
     }

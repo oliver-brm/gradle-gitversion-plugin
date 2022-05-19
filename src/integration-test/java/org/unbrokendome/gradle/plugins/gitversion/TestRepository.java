@@ -13,6 +13,9 @@ import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TemporaryFolder;
 
@@ -21,7 +24,8 @@ import javax.annotation.Nullable;
 
 public class TestRepository extends ExternalResource {
 
-    private final TemporaryFolder rootDir = new TemporaryFolder();
+    @TempDir
+    File rootDir;
 
     /** The directory where the (bare) repository is stored; this will serve as the remote */
     private File bareRepositoryDir;
@@ -33,12 +37,11 @@ public class TestRepository extends ExternalResource {
     /** The Git object for the working dir */
     private Git git;
 
-    @Override
     protected void before() throws Throwable {
-        rootDir.create();
-
-        bareRepositoryDir = rootDir.newFolder("repo");
-        workingDir = rootDir.newFolder("working");
+        bareRepositoryDir = new File(rootDir, "repo");
+        assert bareRepositoryDir.mkdir();
+        workingDir = new File(rootDir, "working");
+        assert workingDir.mkdir();
 
         // initialize the bare repository
         Git.init()
@@ -98,11 +101,10 @@ public class TestRepository extends ExternalResource {
     }
 
 
-    @Override
     protected void after() {
         git.close();
         setupGit.close();
-        rootDir.delete();
+        assert rootDir.delete();
     }
 
 
