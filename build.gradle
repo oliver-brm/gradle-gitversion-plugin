@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'groovy'
-    id 'org.unbroken-dome.test-sets' version '4.0.0'
+    id 'jvm-test-suite'
     id 'com.gradle.plugin-publish' version '1.0.0-rc-2'
 }
 
@@ -22,8 +22,22 @@ test {
     }
 }
 
-testSets {
-    integrationTest { dirName = 'integration-test' }
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            testType = TestSuiteType.INTEGRATION_TEST
+            configurations {
+                integrationTestImplementation.extendsFrom implementation
+            }
+            dependencies {
+                implementation project
+                implementation 'org.junit.jupiter:junit-jupiter'
+                implementation('org.spockframework:spock-core:2.1-groovy-3.0') {
+                    exclude module: 'groovy-all'
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -32,13 +46,12 @@ dependencies {
 
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
-    testImplementation(platform('org.junit:junit-bom:5.8.2'))
-    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation platform('org.junit:junit-bom:5.8.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation('org.spockframework:spock-core:2.1-groovy-3.0') {
         exclude module: 'groovy-all'
     }
 
-    integrationTestRuntimeOnly files(pluginUnderTestMetadata.outputDirectory)
 }
 
 

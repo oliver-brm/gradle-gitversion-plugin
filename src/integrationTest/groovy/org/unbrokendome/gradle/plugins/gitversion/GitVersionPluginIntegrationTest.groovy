@@ -3,12 +3,10 @@ package org.unbrokendome.gradle.plugins.gitversion
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Rule
 import spock.lang.Specification
 
 import java.nio.file.Files
 import java.util.regex.Pattern
-
 
 /**
  * Integration test with a "real" Git repository. Creates a bare git repo and makes some commits to it, the first
@@ -19,14 +17,15 @@ import java.util.regex.Pattern
  */
 class GitVersionPluginIntegrationTest extends Specification {
 
-    @Rule TestRepository testRepository
+    @TestRepository
+    GitRepository testRepository
 
     private BuildResult buildResult
 
 
     static final String BUILD_FILE_PLUGIN_AND_RULES = '''
         plugins {
-            id 'org.unbroken-dome.gitversion'
+            id 'org.hypergammaspace.gitversion'
         }
         
         gitVersion.rules {
@@ -95,7 +94,6 @@ class GitVersionPluginIntegrationTest extends Specification {
                     .merge('release/1.0', 'merge release branch into master')
         }
     }
-
 
     def "master branch"() {
         given:

@@ -1,7 +1,8 @@
 
 if (gradle.startParameter.taskNames.contains('release')) {
     logger.lifecycle 'Starting release build {}', version
-    check.dependsOn integrationTest
+    //check.dependsOn integrationTest
+    check.dependsOn testing.suites.integrationTest
 
 } else {
     logger.lifecycle 'Not a release build, setting version to {}', "${project.version}-SNAPSHOT"
